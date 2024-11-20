@@ -9,7 +9,7 @@ export default function Layout({
                                    }>
 ) {
     return (
-        <div className="w-11/12 bg-[#fff] py-8 px-11 rounded-xl">
+        <div className="w-11/12 bg-[#fff] p-9 rounded-xl shadow-md border-gray-100 font-sans">
                 {children}
         </div>
     );

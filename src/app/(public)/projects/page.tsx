@@ -26,7 +26,7 @@ export default function ProjectsPage(){
 
                             <ul className="pl-4">
                                 {project.subLinks.map((subLink) => (
-                                    <Link href={subLink.href} key={subLink.href}>
+                                    <Link href={project.href + subLink.href} key={subLink.href}>
                                         <li className="text-lg italic">{subLink.name}</li>
                                     </Link>
                                 ))}
