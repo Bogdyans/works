@@ -30,11 +30,11 @@ export const MOCK_MSGS: Message[] = [
         time: "08:06",
         clients: false
     },
-    // {
-    //     id: 5,
-    //     author: "Илон Маск",
-    //     message: "Hey guys, did you know, that, umm. sfdljkfsgdfgnagadgfgnadfgnidfsgnsdfgidfsgdfgdfsgdfjgdfjgdsfg",
-    //     time: "08:33",
-    //     clients: false
-    // },
+    {
+        id: 5,
+        author: "Илон Маск",
+        message: "Hey guys, did you know, that, umm. sfdljkfsgdfgnagadgfgnadfgnidfsgnsdfgidfsgdfgdfsgdfjgdfjgdsfg",
+        time: "08:33",
+        clients: false
+    },
 ]

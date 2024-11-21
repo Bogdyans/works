@@ -8,6 +8,7 @@ import { Message } from './types'
 import { MOCK_MSGS} from "./constants";
 
 
+
 export default function Component() {
     const [messages, setMessages] = useState<Message[]>(MOCK_MSGS)
     const [access, setAccess] = useState(false)
