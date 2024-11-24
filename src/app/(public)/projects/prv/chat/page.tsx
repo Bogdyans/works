@@ -8,6 +8,15 @@ import { Paintbrush } from "lucide-react"
 import { Message } from './types'
 import { CanvasPanel } from './components/canvas'
 
+interface DrawingData {
+    type: 'start' | 'draw' | 'end'
+    x: number
+    y: number
+    color: string
+    lineWidth: number
+}
+
+
 export default function Component() {
     const [messages, setMessages] = useState<Message[]>([])
     const [access, setAccess] = useState(false)
@@ -16,6 +25,8 @@ export default function Component() {
     const [isCanvasOpen, setIsCanvasOpen] = useState(false)
     const messagesEndRef = useRef<HTMLDivElement>(null)
     const ws = useRef<WebSocket | null>(null)
+    const canvasRef = useRef<HTMLCanvasElement | null>(null)
+
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -26,8 +37,12 @@ export default function Component() {
             ws.current = new WebSocket('ws://localhost:8080')
 
             ws.current.onmessage = (event) => {
-                const message: Message = JSON.parse(event.data)
-                setMessages(prevMessages => [...prevMessages, message])
+                const data = JSON.parse(event.data)
+                if (data.type === 'chat') {
+                    setMessages(prevMessages => [...prevMessages, data.message])
+                } else if (data.type === 'draw') {
+                    handleDrawingMessage(data.drawingData)
+                }
             }
 
             return () => {
@@ -49,15 +64,41 @@ export default function Component() {
             clients: true,
         }
 
-        ws.current.send(JSON.stringify(newMessage))
+        ws.current.send(JSON.stringify({ type: 'chat', message: newMessage }))
         setMessages(prevMessages => [...prevMessages, newMessage])
         setCurrentMessage("")
+    }
+
+    const handleDrawingMessage = (drawingData: DrawingData) => {
+        if (!canvasRef.current) return
+        const context = canvasRef.current.getContext('2d')
+        if (!context) return
+
+        context.strokeStyle = drawingData.color
+        context.lineWidth = drawingData.lineWidth
+
+        if (drawingData.type === 'start') {
+            context.beginPath()
+            context.moveTo(drawingData.x, drawingData.y)
+        } else if (drawingData.type === 'draw') {
+            context.lineTo(drawingData.x, drawingData.y)
+            context.stroke()
+        } else if (drawingData.type === 'end') {
+            context.closePath()
+        }
     }
 
     const handleKeyPress = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter') {
             handleSendMessage()
         }
+    }
+
+    const handleDrawing = (drawingData: DrawingData) => {
+        if (ws.current) {
+            ws.current.send(JSON.stringify({ type: 'draw', drawingData }))
+        }
+        handleDrawingMessage(drawingData)
     }
 
     if (!access) {
@@ -158,6 +199,8 @@ export default function Component() {
             <CanvasPanel
                 isOpen={isCanvasOpen}
                 onClose={() => setIsCanvasOpen(false)}
+                onDraw={handleDrawing}
+                canvasRef={canvasRef}
             />
         </>
     )

@@ -4,13 +4,22 @@ import { useRef, useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Paintbrush, Eraser, RotateCcw, X } from 'lucide-react'
 
+interface DrawingData {
+    type: 'start' | 'draw' | 'end'
+    x: number
+    y: number
+    color: string
+    lineWidth: number
+}
+
 interface CanvasPanelProps {
     isOpen: boolean
     onClose: () => void
+    onDraw: (drawingData: DrawingData) => void
+    canvasRef: React.RefObject<HTMLCanvasElement>
 }
 
-export function CanvasPanel({ isOpen, onClose }: CanvasPanelProps) {
-    const canvasRef = useRef<HTMLCanvasElement>(null)
+export function CanvasPanel({ isOpen, onClose, onDraw, canvasRef }: CanvasPanelProps) {
     const [isDrawing, setIsDrawing] = useState(false)
     const [tool, setTool] = useState<'brush' | 'eraser'>('brush')
     const contextRef = useRef<CanvasRenderingContext2D | null>(null)
@@ -31,18 +40,25 @@ export function CanvasPanel({ isOpen, onClose }: CanvasPanelProps) {
         context.strokeStyle = 'black'
         context.lineWidth = 2
         contextRef.current = context
-    }, [])
+    }, [canvasRef])
 
     const startDrawing = (e: React.MouseEvent<HTMLCanvasElement>) => {
         const canvas = canvasRef.current
         if (!canvas) return
 
         const rect = canvas.getBoundingClientRect()
-        lastPositionRef.current = {
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top
-        }
+        const x = e.clientX - rect.left
+        const y = e.clientY - rect.top
+        lastPositionRef.current = { x, y }
         setIsDrawing(true)
+
+        onDraw({
+            type: 'start',
+            x,
+            y,
+            color: tool === 'brush' ? 'black' : 'white',
+            lineWidth: tool === 'brush' ? 2 : 20
+        })
     }
 
     const draw = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -50,21 +66,29 @@ export function CanvasPanel({ isOpen, onClose }: CanvasPanelProps) {
 
         const canvas = canvasRef.current
         const rect = canvas.getBoundingClientRect()
-        const currentPosition = {
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top
-        }
+        const x = e.clientX - rect.left
+        const y = e.clientY - rect.top
 
-        contextRef.current.beginPath()
-        contextRef.current.moveTo(lastPositionRef.current.x, lastPositionRef.current.y)
-        contextRef.current.lineTo(currentPosition.x, currentPosition.y)
-        contextRef.current.stroke()
+        onDraw({
+            type: 'draw',
+            x,
+            y,
+            color: tool === 'brush' ? 'black' : 'white',
+            lineWidth: tool === 'brush' ? 2 : 20
+        })
 
-        lastPositionRef.current = currentPosition
+        lastPositionRef.current = { x, y }
     }
 
     const stopDrawing = () => {
         setIsDrawing(false)
+        onDraw({
+            type: 'end',
+            x: lastPositionRef.current.x,
+            y: lastPositionRef.current.y,
+            color: tool === 'brush' ? 'black' : 'white',
+            lineWidth: tool === 'brush' ? 2 : 20
+        })
     }
 
     const clearCanvas = () => {
@@ -78,17 +102,7 @@ export function CanvasPanel({ isOpen, onClose }: CanvasPanelProps) {
     }
 
     const toggleTool = () => {
-        if (!contextRef.current) return
-
-        if (tool === 'brush') {
-            setTool('eraser')
-            contextRef.current.strokeStyle = 'white'
-            contextRef.current.lineWidth = 20
-        } else {
-            setTool('brush')
-            contextRef.current.strokeStyle = 'black'
-            contextRef.current.lineWidth = 2
-        }
+        setTool(prevTool => prevTool === 'brush' ? 'eraser' : 'brush')
     }
 
     return (
