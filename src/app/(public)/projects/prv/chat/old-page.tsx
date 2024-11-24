@@ -22,7 +22,7 @@ export default function ChatPage() {
 
     return (
         <div className="space-y-2">
-            <H content="Chat"/>
+            <H content="Page"/>
 
             <div
                 className={`w-full h-[500px] bg-gray-100 rounded-xl shadow-inner ${!access ? "py-32" : "px-5 py-5"}`}
