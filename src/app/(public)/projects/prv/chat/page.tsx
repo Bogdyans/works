@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Paintbrush } from "lucide-react"
-import { Message } from './types'
+import { Message } from './libs/types'
 import { CanvasPanel } from './components/canvas'
 
 interface DrawingData {
