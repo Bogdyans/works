@@ -1,26 +1,29 @@
 'use client'
 
-import {FormEvent, useState} from "react";
-import {Input} from "postcss";
+import { useFormState, useFormStatus } from 'react-dom'
+import {useState} from "react";
 import BInput from "@/app/(public)/components/input";
+import {signup} from "@/app/action/auth";
+
 
 
 export default function SignUp(){
+    const [state, action] = useFormState(signup, undefined)
+
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
-        e.preventDefault()
+    const [errorMsg, setErrorMsg] = useState("");
 
-    }
+
 
     return (
 
         <form
             className="w-[470px] bg-[#fff] flex flex-col space-y-6 items-center border border-gray-100 p-8 rounded-xl shadow-md"
-            onSubmit={(e) => handleSubmit(e)}
+            action={action}
         >
             <h1 className="m-auto text-3xl font-bold">Sign Up</h1>
 
@@ -67,6 +70,9 @@ export default function SignUp(){
                 />
 
                 <hr className="w-[100%] mx-auto border-t border-gray-300"/>
+
+                {state?.errors?.name && <p className="text-sm text-center text-red-400">{state.errors.name}</p>}
+
                 <button
                     type="submit"
                     className="border shadow-sm rounded-lg border-gray-100 hover:border-gray-200 focus:shadow-md

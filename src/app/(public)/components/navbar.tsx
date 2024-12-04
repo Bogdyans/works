@@ -34,7 +34,7 @@ export default function Navbar(){
                 <div className="flex items-center space-x-4 ">
                     <Link
                         className="inline-flex h-10 items-center rounded-md border border-gray-200 bg-white px-3 text-sm font-medium"
-                        href="/login"
+                        href="/signup"
                     >
                         Login
                     </Link>

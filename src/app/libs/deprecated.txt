@@ -1,0 +1,36 @@
+//app/(public)/signup/page
+const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        setErrorMsg("");
+
+        const formData = new FormData(e.currentTarget);
+
+        const user = formData.get("username");
+        const mail = formData.get("email");
+        const pass = formData.get("password");
+        const confirmPass = formData.get("confirmPassword");
+
+
+        if (!validateString(password)) {
+            setErrorMsg("Password should be more than 8 characters long and should only contain Alphanumeric and '-' characters.");
+            return;
+        }
+        if (password !== confirmPassword) {
+            setErrorMsg("Passwords don't match");
+            return;
+        }
+
+        const res = await fetch('/api/auth/signup', {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ username, email, password }),
+        })
+
+        const data = await res.json();
+
+        if (res.ok){
+            router.push("/");
+        } else {
+            setErrorMsg(data);
+        }
+    }
