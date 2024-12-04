@@ -1,6 +1,6 @@
 'use client'
 
-import { useFormState, useFormStatus } from 'react-dom'
+import { useFormState } from 'react-dom'
 import {useState} from "react";
 import BInput from "@/app/(public)/components/input";
 import {signup} from "@/app/action/auth";
@@ -15,7 +15,6 @@ export default function SignUp(){
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
-    const [errorMsg, setErrorMsg] = useState("");
 
 
 

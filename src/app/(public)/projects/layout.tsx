@@ -1,5 +1,3 @@
-import Navbar from "@/app/(public)/components/navbar";
-
 
 export default function Layout({
                                    children,
