@@ -9,6 +9,10 @@ export const PROJECTS_URLS = [
             {
                 name: 'Экспертная система',
                 href: '/expert'
+            },
+            {
+                name: 'Сценарная система',
+                href: '/scenery'
             }
         ]
     },
@@ -19,6 +23,16 @@ export const PROJECTS_URLS = [
             {
                 name: 'Распределённый чат',
                 href: '/chat'
+            }
+        ]
+    },
+    {
+        name: 'РПБД',
+        href: '/projects/rpbd',
+        subLinks: [
+            {
+                name: 'Шахматы',
+                href: '/chess'
             }
         ]
     }

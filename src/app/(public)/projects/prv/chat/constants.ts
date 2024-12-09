@@ -1,4 +1,4 @@
-import {Message} from "@/app/(public)/projects/prv/chat/types";
+import {Message} from "@/app/(public)/projects/libs/types";
 
 
 export const MOCK_MSGS: Message[] = [

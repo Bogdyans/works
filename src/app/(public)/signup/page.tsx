@@ -17,9 +17,7 @@ export default function SignUp(){
 
 
 
-
     return (
-
         <form
             className="w-[470px] bg-[#fff] flex flex-col space-y-6 items-center border border-gray-100 p-8 rounded-xl shadow-md"
             action={action}
