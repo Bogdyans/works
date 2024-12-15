@@ -23,7 +23,11 @@ export const PROJECTS_URLS = [
             {
                 name: 'Распределённый чат',
                 href: '/chat'
-            }
+            },
+            {
+                name: 'Мандельброт',
+                href: '/mandelbrot'
+            },
         ]
     },
     {

@@ -14,6 +14,7 @@ export default function Component() {
     const [messages, setMessages] = useState<Message[]>([])
     const [currentMessage, setCurrentMessage] = useState("")
     const messagesEndRef = useRef<HTMLDivElement>(null)
+    const [currentStep, setCurrentStep] = useState("");
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -23,6 +24,7 @@ export default function Component() {
 
     const handleSendMessage = async () => {
         if (!currentMessage.trim()) return
+
 
         const newUserMessage: Message = {
             id: Date.now(),
@@ -35,14 +37,29 @@ export default function Component() {
         setMessages(prevMessages => [...prevMessages, newUserMessage])
         setCurrentMessage("")
 
+        let response;
+
         try {
-            const response = await fetch('/api/chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ message: currentMessage }),
-            });
+            if (currentStep !== "weather") {
+                 response = await fetch('/api/scenario', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({message: currentMessage, currentStep: currentStep}),
+                });
+
+
+
+            } else {
+                 response = await fetch('/api/scenario/weather', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({message: currentMessage}),
+                });
+            }
 
             const data = await response.json();
 
@@ -54,7 +71,13 @@ export default function Component() {
                 clients: false,
             }
 
+            console.log(data.currentStep);
             setMessages(prevMessages => [...prevMessages, newBotMessage])
+            if (currentStep !== 'weather') {
+                setCurrentStep(data.currentStep)
+            } else {
+                setCurrentStep("");
+            }
         } catch (error) {
             console.error('Error:', error);
         }

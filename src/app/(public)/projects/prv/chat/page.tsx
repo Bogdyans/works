@@ -34,7 +34,7 @@ export default function Component() {
 
     useEffect(() => {
         if (access) {
-            ws.current = new WebSocket('ws://localhost:8080')
+            ws.current = new WebSocket('ws://26.184.115.5:8080')
 
             ws.current.onmessage = (event) => {
                 const data = JSON.parse(event.data)

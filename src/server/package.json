@@ -13,6 +13,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@vercel/postgres": "^0.10.0",
     "ws": "^8.18.0"
   }
 }
