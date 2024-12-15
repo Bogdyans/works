@@ -5,8 +5,6 @@
 ``` 
 npm install
 npm run dev
-cd src/server
-npm start
     
 ```
 
